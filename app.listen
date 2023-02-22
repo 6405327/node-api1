@@ -1,0 +1,10 @@
+app.get('/pets_price', function(req, res){
+  connection.query(
+    `SELECT id, petName, price
+     FROM pet
+     ORDER BY price;`,
+     function(err, results) {
+      res.json(results)
+     }
+  )
+})
