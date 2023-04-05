@@ -26,7 +26,7 @@ app.get("/", function (req, res) {
 //     `SELECT O.orderid, C.firstname AS customer, P.name AS Product_Name, O.quantity
 //       FROM a1_order
 //       LEFT JOIN a1_customer C ON O.ID_Customer = C.ID_Customer
-//       LEFT JOIN a1_Products P ON O.ID_Product = P.ID_Product; `,
+//       LEFT JOIN a1_bags P ON O.ID_Product = P.ID_Product; `,
 //     function (err, results) {
 //       res.json(results);
 //     }
@@ -35,7 +35,7 @@ app.get("/", function (req, res) {
 
 app.get("/top_products", function (req, res) {
   connection.query(
-    "SELECT a1_bag.* , sum(quantity) as quantity_sum FROM a1_bag,a1_order WHERE a1_order.bag_id = a1_product.bag_id GROUP BY a1_order.bag_id ORDER BY quantity_sum desc;",
+    "SELECT a1_bag.* , sum(quantity) as quantity_sum FROM a1_bag,a1_order WHERE a1_order.bag_id = a1_bag.bag_id GROUP BY a1_order.bag_id ORDER BY quantity_sum desc;",
     function (err, results) {
       console.log(results); //แสดงผลที่ console
       res.json(results); //ตอบกลับ request
@@ -45,7 +45,7 @@ app.get("/top_products", function (req, res) {
 
 app.get("/top_customers", function (req, res) {
   connection.query(
-    "SELECT a1_customer.*, sum(quantity*price) as price_sum FROM a1_customer,a1_order,a1_bag WHERE a1_order.c_id = a1_customer.c_id AND a1_order.bag_id = a1_product.bag_id GROUP BY a1_order.c_id ORDER BY price_sum DESC;",
+    "SELECT a1_customer.*, sum(quantity*bag_price) as bag_price_sum FROM a1_customer,a1_order,a1_bag WHERE a1_order.c_id = a1_customer.c_id AND a1_order.bag_id = a1_bag.bag_id GROUP BY a1_order.c_id ORDER BY bag_price_sum DESC;",
     function (err, results) {
       console.log(results); //แสดงผลที่ console
       res.json(results); //ตอบกลับ request
